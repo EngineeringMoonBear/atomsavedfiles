@@ -1,0 +1,29 @@
+select id, custom_config_options, name from checks where checks.is_enabled = 'true' and checks.is_archived = 'false' and checks.custom_config_options like '%explicit_wait_time%'
+
+
+Akamai - Barclay is asking for us to update all there HTTP locations
+
+#Research
+```select id, name, type from checks
+where not checks.is_archived
+and checks.account_id = 1660
+and type = 'ResponseCheck'```
+
+Pulled 41 checks, confirmed with customer that they wanted all of these updated
+
+Wants to update all these checks with only the 22 locations of NA & EU | Pulled via the API
+Location IDs: (6, 10, 12, 156, 154, 47, 45, 36, 5, 38, 21, 147, 145, 155, 32, 146, 23, 13, 44, 31, 53, 158)
+
+#dropped runs at https://rollbar.com/rigor/real-browser/rql/
+
+SELECT *
+FROM item_occurrence
+WHERE
+    (
+        body.trace.extra.real_browser_check.id = 137856
+        OR body.trace_chain.0.extra.real_browser_check.id = 137856
+        OR body.trace.extra.message_attributes.check_id = 137856
+        OR body.trace_chain.0.extra.message_attributes.check_id = 137856
+    )
+    AND timestamp > unix_timestamp() - 60 * 60 * 24
+ORDER BY timestamp DESC
