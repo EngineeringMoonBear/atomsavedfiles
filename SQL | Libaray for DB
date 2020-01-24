@@ -25,5 +25,5 @@ WHERE
         OR body.trace.extra.message_attributes.check_id = 137856
         OR body.trace_chain.0.extra.message_attributes.check_id = 137856
     )
-    AND timestamp > unix_timestamp() - 60 * 60 * 24
+    AND timestamp > unix_timestamp() 0- 60 * 60 * 24
 ORDER BY timestamp DESC
